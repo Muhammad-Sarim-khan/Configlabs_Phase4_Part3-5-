@@ -1,10 +1,10 @@
-const { clerkMiddleware } = require('@clerk/nextjs/server');
+import { clerkMiddleware } from '@clerk/nextjs/server';
 
-module.exports = clerkMiddleware({
+export default clerkMiddleware({
   publicRoutes: ["/", "/sign-in", "/sign-up", "/api/webhook"],
 });
 
-module.exports.config = {
+export const config = {
   matcher: [
     "/((?!_next|.*\\..*|sign-in|sign-up|favicon.ico).*)",
   ],
