@@ -1,14 +1,22 @@
 'use client';
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-import { useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 
 export default function SuccessPage() {
-  const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id");
-  const userId = searchParams.get("userId");
   const router = useRouter();
+
+  const [sessionId, setSessionId] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSessionId(params.get("session_id"));
+    setUserId(params.get("userId"));
+  }, []);
 
   useEffect(() => {
     if (sessionId && userId) {
@@ -17,10 +25,10 @@ export default function SuccessPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId, userId }),
       }).then(() => {
-        router.replace("/orders"); // redirect to order history
+        router.replace("/orders");
       });
     }
-  }, [sessionId, userId]);
+  }, [sessionId, userId, router]);
 
   return <p className="p-8 text-center">Processing your order...</p>;
 }
